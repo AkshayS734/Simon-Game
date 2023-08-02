@@ -12,4 +12,4 @@ The Simon Game is a classic electronic memory game where players need to remembe
 
 ## Demo
 
-You can play the game [here](https://AkshayS734.github.io/simon-game/).
+You can play the game [here](https://AkshayS734.github.io/Simon-Game/).
