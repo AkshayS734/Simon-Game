@@ -1,0 +1,416 @@
+.game-button {
+  position: relative;
+  margin: 0.5rem;
+  display: inline-block;
+  height: 140px;
+  width: 140px;
+  border: none;
+  border-radius: 24px;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  outline: none;
+  overflow: hidden;
+  user-select: none;
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    0 4px 16px rgba(0, 0, 0, 0.2);
+  transform: translateY(0);
+  background: var(--button-color);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.game-button:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 3px;
+}
+
+.game-button:hover:not(.disabled):not(.sequence-mode) {
+  transform: translateY(-4px);
+  box-shadow: 
+    0 16px 40px rgba(var(--button-glow), 0.4),
+    0 8px 20px rgba(var(--button-glow), 0.3),
+    0 4px 12px rgba(0, 0, 0, 0.2);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.game-button:active:not(.disabled) {
+  transform: translateY(-1px);
+  transition: all 0.1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.game-button.disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+  transform: none !important;
+  box-shadow: 
+    0 2px 8px rgba(0, 0, 0, 0.1),
+    inset 0 1px 2px rgba(255, 255, 255, 0.05);
+}
+
+.game-button.sequence-mode {
+  cursor: default;
+  opacity: 1 !important;
+}
+
+/* Button Content */
+.button-content {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.button-glow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: inherit;
+  background: radial-gradient(circle at center, rgba(255, 255, 255, 0.3), transparent 60%);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.button-shine {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 30%;
+  border-radius: inherit;
+  background: linear-gradient(180deg, 
+    rgba(255, 255, 255, 0.3) 0%, 
+    rgba(255, 255, 255, 0.1) 50%, 
+    transparent 100%
+  );
+}
+
+/* Inner glow effect */
+.game-button::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 60px;
+  height: 60px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 70%);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+/* Color Variants */
+.game-button.red {
+  --button-color: #ef4444;
+  --button-glow: 239, 68, 68;
+}
+
+.game-button.green {
+  --button-color: #10b981;
+  --button-glow: 16, 185, 129;
+}
+
+.game-button.blue {
+  --button-color: #3b82f6;
+  --button-glow: 59, 130, 246;
+}
+
+.game-button.yellow {
+  --button-color: #f59e0b;
+  --button-glow: 245, 158, 11;
+}
+
+.game-button.blue {
+  --button-light: #339af0;
+  --button-dark: #1971c2;
+  background: linear-gradient(145deg, #339af0, #1971c2);
+}
+
+.game-button.yellow {
+  --button-light: #ffd43b;
+  --button-dark: #fab005;
+  background: linear-gradient(145deg, #ffd43b, #fab005);
+}
+
+/* Pressed/Active State */
+.game-button.pressed {
+  transform: translateY(-1px) scale(0.98);
+  box-shadow: 
+    0 6px 25px rgba(0, 0, 0, 0.4),
+    0 3px 12px rgba(0, 0, 0, 0.3),
+    inset 0 2px 4px rgba(0, 0, 0, 0.1);
+  animation: buttonPulse 0.3s ease;
+  filter: brightness(1.4) saturate(1.2);
+}
+
+.game-button.pressed .button-glow {
+  opacity: 1;
+  animation: glowPulse 0.3s ease;
+}
+
+/* Enhanced sequence mode highlighting */
+.game-button.sequence-mode.pressed {
+  transform: translateY(-2px) scale(1.05);
+  animation: sequenceHighlight 0.4s ease;
+  filter: brightness(1.6) saturate(1.3);
+  box-shadow: 
+    0 8px 35px rgba(var(--button-glow), 0.6),
+    0 4px 15px rgba(var(--button-glow), 0.4),
+    inset 0 2px 4px rgba(255, 255, 255, 0.2);
+}
+
+.game-button.pressed.red {
+  --button-glow: 239, 68, 68;
+}
+
+.game-button.pressed.green {
+  --button-glow: 34, 197, 94;
+}
+
+.game-button.pressed.blue {
+  --button-glow: 59, 130, 246;
+}
+
+.game-button.pressed.yellow {
+  --button-glow: 234, 179, 8;
+}
+
+/* Ripple Effect */
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.6);
+  transform: scale(0);
+  animation: rippleAnimation 0.5s ease-out;
+  pointer-events: none;
+}
+
+/* Size Variants */
+.game-button.small {
+  height: 120px;
+  width: 120px;
+  margin: 0.375rem;
+}
+
+.game-button.large {
+  height: 180px;
+  width: 180px;
+  margin: 0.75rem;
+}
+
+/* Animations */
+@keyframes buttonPulse {
+  0% { 
+    transform: translateY(-1px) scale(0.98); 
+  }
+  50% { 
+    transform: translateY(-1px) scale(1.02); 
+  }
+  100% { 
+    transform: translateY(-1px) scale(0.98); 
+  }
+}
+
+@keyframes glowPulse {
+  0% { opacity: 0; }
+  50% { opacity: 0.8; }
+  100% { opacity: 0.6; }
+}
+
+@keyframes sequenceHighlight {
+  0% { 
+    transform: translateY(-2px) scale(1.05);
+    filter: brightness(1.6) saturate(1.3);
+  }
+  25% { 
+    transform: translateY(-3px) scale(1.08);
+    filter: brightness(1.8) saturate(1.4);
+  }
+  75% { 
+    transform: translateY(-3px) scale(1.08);
+    filter: brightness(1.8) saturate(1.4);
+  }
+  100% { 
+    transform: translateY(-2px) scale(1.05);
+    filter: brightness(1.6) saturate(1.3);
+  }
+}
+
+@keyframes rippleAnimation {
+  0% {
+    transform: scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .game-button {
+    height: 120px;
+    width: 120px;
+    margin: 0.375rem;
+  }
+  
+  .game-button.small {
+    height: 100px;
+    width: 100px;
+  }
+  
+  .game-button.large {
+    height: 140px;
+    width: 140px;
+  }
+}
+
+@media (max-width: 480px) {
+  .game-button {
+    height: 100px;
+    width: 100px;
+    margin: 0.25rem;
+  }
+  
+  .game-button.small {
+    height: 80px;
+    width: 80px;
+  }
+  
+  .game-button.large {
+    height: 120px;
+    width: 120px;
+  }
+}
+
+/* Animations */
+@keyframes buttonPulse {
+  0% { 
+    transform: translateY(-1px) scale(0.98); 
+  }
+  50% { 
+    transform: translateY(-1px) scale(1.02); 
+  }
+  100% { 
+    transform: translateY(-1px) scale(0.98); 
+  }
+}
+
+@keyframes sequenceHighlight {
+  0% { 
+    transform: translateY(-2px) scale(1);
+    filter: brightness(1);
+  }
+  25% { 
+    transform: translateY(-2px) scale(1.05);
+    filter: brightness(1.3);
+  }
+  75% { 
+    transform: translateY(-2px) scale(1.05);
+    filter: brightness(1.3);
+  }
+  100% { 
+    transform: translateY(-2px) scale(1.05);
+    filter: brightness(1);
+  }
+}
+
+@keyframes glowPulse {
+  0% { opacity: 0; }
+  50% { opacity: 1; }
+  100% { opacity: 1; }
+}
+
+@keyframes rippleAnimation {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .game-button {
+    height: 130px;
+    width: 130px;
+    margin: 6px;
+    border-radius: 20px;
+  }
+  
+  .game-button.small {
+    height: 100px;
+    width: 100px;
+    margin: 4px;
+  }
+  
+  .game-button.large {
+    height: 150px;
+    width: 150px;
+    margin: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .game-button {
+    height: 110px;
+    width: 110px;
+    margin: 4px;
+    border-radius: 16px;
+  }
+  
+  .game-button.small {
+    height: 90px;
+    width: 90px;
+    margin: 3px;
+  }
+  
+  .game-button.large {
+    height: 130px;
+    width: 130px;
+    margin: 6px;
+  }
+}
+
+@media (max-width: 320px) {
+  .game-button {
+    height: 90px;
+    width: 90px;
+    margin: 3px;
+    border-radius: 12px;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .game-button {
+    box-shadow: 
+      0 8px 32px rgba(0, 0, 0, 0.6),
+      0 4px 16px rgba(0, 0, 0, 0.4),
+      inset 0 2px 4px rgba(255, 255, 255, 0.08);
+  }
+  
+  .game-button:hover:not(.disabled):not(.sequence-mode) {
+    box-shadow: 
+      0 12px 40px rgba(0, 0, 0, 0.7),
+      0 6px 20px rgba(0, 0, 0, 0.5),
+      inset 0 2px 4px rgba(255, 255, 255, 0.12);
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .game-button {
+    border: 3px solid #000;
+  }
+  
+  .game-button:focus-visible {
+    outline: 4px solid #fff;
+    outline-offset: 2px;
+  }
+}
