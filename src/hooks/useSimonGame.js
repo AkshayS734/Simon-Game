@@ -21,9 +21,12 @@ const useSimonGame = () => {
   const [activeButton, setActiveButton] = useState(null);
   const [difficulty, setDifficulty] = useState('normal');
   const [soundEnabled, setSoundEnabled] = useState(true);
+  const [volume, setVolume] = useState(0.7);
   const [score, setScore] = useState(0);
   const [streak, setStreak] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
+  const [wrongAnswer, setWrongAnswer] = useState(false);
+  const [audioError, setAudioError] = useState(false);
   
   // Audio refs for preloaded sounds
   const audioRefs = useRef({});
@@ -31,21 +34,39 @@ const useSimonGame = () => {
   // Preload all sounds
   useEffect(() => {
     const preloadAudio = () => {
-      COLORS.forEach(color => {
-        const audio = new Audio(`/sounds/${color}.mp3`);
-        audio.preload = 'auto';
-        audio.volume = 0.7;
-        audioRefs.current[color] = audio;
-      });
-      
-      const wrongAudio = new Audio('/sounds/wrong.mp3');
-      wrongAudio.preload = 'auto';
-      wrongAudio.volume = 0.8;
-      audioRefs.current.wrong = wrongAudio;
+      try {
+        COLORS.forEach(color => {
+          const audio = new Audio(`/sounds/${color}.mp3`);
+          audio.preload = 'auto';
+          audio.volume = volume;
+          
+          // Handle audio loading errors
+          audio.addEventListener('error', () => {
+            console.warn(`Failed to load audio: ${color}.mp3`);
+            setAudioError(true);
+          });
+          
+          audioRefs.current[color] = audio;
+        });
+        
+        const wrongAudio = new Audio('/sounds/wrong.mp3');
+        wrongAudio.preload = 'auto';
+        wrongAudio.volume = volume * 1.1; // Wrong sound slightly louder
+        
+        wrongAudio.addEventListener('error', () => {
+          console.warn('Failed to load audio: wrong.mp3');
+          setAudioError(true);
+        });
+        
+        audioRefs.current.wrong = wrongAudio;
+      } catch (error) {
+        console.warn('Audio initialization failed:', error);
+        setAudioError(true);
+      }
     };
 
     preloadAudio();
-  }, []);
+  }, [volume]);
 
   const playSound = useCallback((color) => {
     if (!soundEnabled) return;
@@ -154,10 +175,14 @@ const useSimonGame = () => {
       }
     } else {
       // Wrong answer
+      setWrongAnswer(true);
       playWrongSound();
-      setIsGameOver(true);
-      setIsStarted(false);
-      setStreak(0);
+      setTimeout(() => {
+        setWrongAnswer(false);
+        setIsGameOver(true);
+        setIsStarted(false);
+        setStreak(0);
+      }, 500); // Show wrong feedback for 500ms before game over
     }
   }, [
     userPattern, 
@@ -186,6 +211,7 @@ const useSimonGame = () => {
     setShowingSequence(false);
     setActiveButton(null);
     setIsPaused(false);
+    setWrongAnswer(false);
   }, []);
 
   const playSequence = useCallback(async () => {
@@ -238,6 +264,10 @@ const useSimonGame = () => {
     setSoundEnabled(prev => !prev);
   }, []);
 
+  const changeVolume = useCallback((newVolume) => {
+    setVolume(newVolume);
+  }, []);
+
   const getHighScore = useCallback(() => {
     const saved = localStorage.getItem(`simon-high-score-${difficulty}`);
     return saved ? parseInt(saved, 10) : 0;
@@ -266,10 +296,13 @@ const useSimonGame = () => {
     isPaused,
     gamePattern,
     activeButton,
+    wrongAnswer,
+    audioError,
     
     // Settings
     difficulty,
     soundEnabled,
+    volume,
     
     // Actions
     startGame,
@@ -279,6 +312,7 @@ const useSimonGame = () => {
     pauseGame,
     changeDifficulty,
     toggleSound,
+    changeVolume,
     getHighScore,
     saveHighScore,
     

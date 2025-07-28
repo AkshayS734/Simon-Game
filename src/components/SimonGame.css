@@ -16,6 +16,19 @@
   -ms-overflow-style: none; /* Internet Explorer 10+ */
 }
 
+/* Screen reader only content */
+.sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
 /* Hide scrollbar for webkit browsers */
 .simon-game::-webkit-scrollbar {
   display: none;
@@ -38,6 +51,22 @@
 .simon-game.game-over {
   background: #1a0a0a;
   animation: gameOverPulse 0.5s ease-in-out;
+}
+
+.simon-game.wrong-answer {
+  animation: wrongAnswerShake 0.5s ease-in-out;
+}
+
+.simon-game.wrong-answer::before {
+  background: 
+    radial-gradient(ellipse at center, rgba(239, 68, 68, 0.15) 0%, transparent 60%),
+    radial-gradient(ellipse at top left, rgba(220, 38, 38, 0.1) 0%, transparent 50%);
+}
+
+@keyframes wrongAnswerShake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-8px); }
+  20%, 40%, 60%, 80% { transform: translateX(8px); }
 }
 
 .simon-game.paused {

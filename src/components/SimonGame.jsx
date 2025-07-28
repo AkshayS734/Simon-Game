@@ -15,8 +15,10 @@ const SimonGame = () => {
     showingSequence,
     isPaused,
     activeButton,
+    wrongAnswer,
     difficulty,
     soundEnabled,
+    volume,
     difficultyName,
     startGame,
     handleUserClick,
@@ -25,12 +27,56 @@ const SimonGame = () => {
     pauseGame,
     changeDifficulty,
     toggleSound,
+    changeVolume,
     getHighScore,
     saveHighScore
   } = useSimonGame();
 
   const [showSettings, setShowSettings] = useState(false);
   const [newHighScore, setNewHighScore] = useState(false);
+
+  // Global keyboard controls
+  useEffect(() => {
+    const handleKeyPress = (event) => {
+      // Prevent keyboard actions when settings are open
+      if (showSettings) return;
+      
+      switch (event.code) {
+        case 'Space':
+          event.preventDefault();
+          if (isStarted && !isGameOver) {
+            pauseGame();
+          }
+          break;
+        case 'Enter':
+          event.preventDefault();
+          if (!isStarted || isGameOver) {
+            isGameOver ? resetGame() : startGame();
+          }
+          break;
+        case 'Escape':
+          event.preventDefault();
+          if (isStarted && !isGameOver) {
+            resetGame();
+          }
+          break;
+        case 'KeyR':
+          event.preventDefault();
+          resetGame();
+          break;
+        default:
+          // Any other key starts the game if not started
+          if (!isStarted && !isGameOver && !event.ctrlKey && !event.metaKey && !event.altKey) {
+            event.preventDefault();
+            startGame();
+          }
+          break;
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress);
+  }, [isStarted, isGameOver, showSettings, startGame, resetGame, pauseGame]);
 
   // Play sequence when game pattern changes
   useEffect(() => {
@@ -43,14 +89,6 @@ const SimonGame = () => {
   }, [level, isStarted, isPaused, playSequence]);
 
   // Handle game over and high score
-  useEffect(() => {
-    if (isGameOver) {
-      const isNewHighScore = saveHighScore();
-      setNewHighScore(isNewHighScore);
-    }
-  }, [isGameOver, saveHighScore]);
-
-    // Handle game over and high score
   useEffect(() => {
     if (isGameOver) {
       const isNewHighScore = saveHighScore();
@@ -87,7 +125,19 @@ const SimonGame = () => {
   };
 
   return (
-    <div className={`simon-game ${isGameOver ? 'game-over' : ''} ${isPaused ? 'paused' : ''} ${showingSequence ? 'showing-sequence' : ''}`}>
+    <div className={`simon-game ${isGameOver ? 'game-over' : ''} ${isPaused ? 'paused' : ''} ${showingSequence ? 'showing-sequence' : ''} ${wrongAnswer ? 'wrong-answer' : ''}`}>
+      {/* Screen reader announcements */}
+      <div className="sr-only" aria-live="polite" aria-atomic="true">
+        {isGameOver && `Game over. Final score: ${score.toLocaleString()}`}
+        {!isGameOver && isStarted && level > 0 && `Level ${level}. Score: ${score.toLocaleString()}`}
+        {showingSequence && 'Watch the sequence'}
+        {isStarted && !showingSequence && !isGameOver && 'Your turn'}
+      </div>
+      
+      <div className="sr-only" aria-live="assertive">
+        {newHighScore && 'New high score achieved!'}
+        {isPaused && 'Game paused'}
+      </div>
       <header className="game-header">
         <div className="header-top">
           <h1 className="game-title">{getTitle()}</h1>
@@ -247,6 +297,8 @@ const SimonGame = () => {
         onDifficultyChange={changeDifficulty}
         soundEnabled={soundEnabled}
         onSoundToggle={toggleSound}
+        volume={volume}
+        onVolumeChange={changeVolume}
         difficultyName={difficultyName}
         isGameActive={isStarted && !isGameOver}
       />
