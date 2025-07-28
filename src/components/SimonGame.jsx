@@ -146,7 +146,7 @@ const SimonGame = () => {
             onClick={() => setShowSettings(true)}
             aria-label="Open settings"
           >
-            <img src="public/gear.svg" alt="Settings" className="settings-icon" />
+            <img src="/gear.svg" alt="Settings" className="settings-icon" />
           </button>
         </div>
         
