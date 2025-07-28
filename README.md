@@ -5,12 +5,33 @@ A modern React.js implementation of the classic Simon Game - a memory game where
 ## Features
 
 - 🎮 Classic Simon Game gameplay
-- 🔊 Sound effects for each color button
+- 🔊 Sound effects for each color button with volume control
 - 📱 Fully responsive design for mobile and desktop
-- 🏆 High score tracking with localStorage persistence
-- ⌨️ Keyboard controls (any key to start/restart)
-- 🎨 Modern UI with smooth animations
-- ♿ Accessibility features with ARIA labels
+- 🏆 High score tracking with localStorage persistence (per difficulty)
+- ⌨️ Comprehensive keyboard controls
+- 🎨 Modern UI with smooth animations and visual feedback
+- ♿ Full accessibility features with ARIA labels and screen reader support
+- 🛡️ Error boundary for graceful error handling
+- 🎯 Multiple difficulty levels (Easy, Normal, Hard)
+- ⏸️ Pause/Resume functionality
+- 🔄 Visual feedback for wrong answers
+- 🎵 Enhanced audio experience with error handling
+
+## Keyboard Controls
+
+- **Enter** - Start game or restart after game over
+- **Space** - Pause/Resume during game
+- **R** - Reset game at any time
+- **Esc** - Reset game (during active game)
+- **Any key** - Start game (when not started)
+
+## Accessibility Features
+
+- Screen reader announcements for game state changes
+- ARIA labels for all interactive elements
+- Keyboard navigation support
+- High contrast visual feedback
+- Focus management
 
 ## How to Play
 
@@ -68,16 +89,20 @@ The built files will be in the `dist` directory.
 ```
 src/
 ├── components/
-│   ├── GameButton.jsx      # Individual color button component
-│   ├── GameButton.css      # Button styling
-│   ├── SimonGame.jsx       # Main game component
-│   └── SimonGame.css       # Game layout and styling
+│   ├── GameButton.jsx        # Individual color button component
+│   ├── GameButton.css        # Button styling with animations
+│   ├── SimonGame.jsx         # Main game component
+│   ├── SimonGame.css         # Game layout and styling
+│   ├── SettingsPanel.jsx     # Game settings modal
+│   ├── SettingsPanel.css     # Settings panel styling
+│   ├── ErrorBoundary.jsx     # Error boundary component
+│   └── ErrorBoundary.css     # Error boundary styling
 ├── hooks/
-│   └── useSimonGame.js     # Custom hook for game logic
-├── App.jsx                 # Root component
-├── App.css                 # App-level styles
-├── index.css               # Global styles
-└── main.jsx                # Entry point
+│   └── useSimonGame.js       # Custom hook for game logic
+├── App.jsx                   # Root component with error boundary
+├── App.css                   # App-level styles
+├── index.css                 # Global styles
+└── main.jsx                  # Entry point
 ```
 
 ## Game Logic

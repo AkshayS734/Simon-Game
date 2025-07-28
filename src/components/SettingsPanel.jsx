@@ -7,6 +7,8 @@ const SettingsPanel = ({
   onDifficultyChange, 
   soundEnabled, 
   onSoundToggle,
+  volume = 0.7,
+  onVolumeChange,
   difficultyName,
   isGameActive = false 
 }) => {
@@ -56,15 +58,47 @@ const SettingsPanel = ({
               {soundEnabled ? 'Sound effects enabled' : 'Sound effects disabled'}
             </p>
           </div>
+
+          {soundEnabled && (
+            <div className="setting-group">
+              <label htmlFor="volume-slider">Volume</label>
+              <div className="volume-control">
+                <input
+                  id="volume-slider"
+                  type="range"
+                  min="0"
+                  max="1"
+                  step="0.1"
+                  value={volume}
+                  onChange={(e) => onVolumeChange(parseFloat(e.target.value))}
+                  className="volume-slider"
+                />
+                <span className="volume-display">{Math.round(volume * 100)}%</span>
+              </div>
+              <p className="setting-description">
+                Adjust the volume of sound effects
+              </p>
+            </div>
+          )}
           
           <div className="setting-group">
             <h3>How to Play</h3>
             <ul className="instructions">
-              <li>Watch the sequence of colored buttons</li>
-              <li>Repeat the sequence by clicking the buttons</li>
-              <li>Each level adds one more color</li>
+              <li>Watch the new color that lights up each round</li>
+              <li>Repeat the entire sequence from the beginning</li>
+              <li>Each level adds one more color to remember</li>
               <li>Get higher scores with harder difficulties</li>
-              <li>Use keyboard: Any key to start, Space to pause</li>
+            </ul>
+          </div>
+
+          <div className="setting-group">
+            <h3>Keyboard Controls</h3>
+            <ul className="keyboard-controls">
+              <li><kbd>Enter</kbd> - Start game or restart after game over</li>
+              <li><kbd>Space</kbd> - Pause/Resume during game</li>
+              <li><kbd>R</kbd> - Reset game at any time</li>
+              <li><kbd>Esc</kbd> - Reset game (during active game)</li>
+              <li><kbd>Any key</kbd> - Start game (when not started)</li>
             </ul>
           </div>
         </div>
