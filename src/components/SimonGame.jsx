@@ -118,9 +118,9 @@ const SimonGame = () => {
     } else if (!isStarted) {
       return 'Ready to Play';
     } else if (showingSequence) {
-      return 'Watch the sequence...';
+      return level === 1 ? 'Watch the first color...' : 'New color added...';
     } else {
-      return 'Repeat the sequence';
+      return `Repeat all ${level} colors`;
     }
   };
 
@@ -130,8 +130,8 @@ const SimonGame = () => {
       <div className="sr-only" aria-live="polite" aria-atomic="true">
         {isGameOver && `Game over. Final score: ${score.toLocaleString()}`}
         {!isGameOver && isStarted && level > 0 && `Level ${level}. Score: ${score.toLocaleString()}`}
-        {showingSequence && 'Watch the sequence'}
-        {isStarted && !showingSequence && !isGameOver && 'Your turn'}
+        {showingSequence && (level === 1 ? 'Watch the first color' : 'New color added to sequence')}
+        {isStarted && !showingSequence && !isGameOver && `Your turn. Repeat all ${level} colors`}
       </div>
       
       <div className="sr-only" aria-live="assertive">
@@ -146,7 +146,7 @@ const SimonGame = () => {
             onClick={() => setShowSettings(true)}
             aria-label="Open settings"
           >
-            ⚙️
+            <img src="public/gear.svg" alt="Settings" className="settings-icon" />
           </button>
         </div>
         

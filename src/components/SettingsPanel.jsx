@@ -84,9 +84,9 @@ const SettingsPanel = ({
           <div className="setting-group">
             <h3>How to Play</h3>
             <ul className="instructions">
-              <li>Watch the sequence of colored buttons</li>
-              <li>Repeat the sequence by clicking the buttons</li>
-              <li>Each level adds one more color</li>
+              <li>Watch the new color that lights up each round</li>
+              <li>Repeat the entire sequence from the beginning</li>
+              <li>Each level adds one more color to remember</li>
               <li>Get higher scores with harder difficulties</li>
             </ul>
           </div>

@@ -221,31 +221,22 @@ const useSimonGame = () => {
     setShowingSequence(true);
     
     const delay = calculateDelay(level);
-    const highlightDuration = Math.max(400, delay * 0.6); // Minimum 400ms highlight
-    const pauseBetween = Math.max(200, delay * 0.3); // Pause between highlights
+    const highlightDuration = Math.max(800, delay * 1.0); // Longer highlight for single color visibility
     
-    for (let i = 0; i < gamePattern.length; i++) {
-      if (isPaused) break;
-      
-      // Show the button highlight
-      setActiveButton(gamePattern[i]);
-      playSound(gamePattern[i]);
-      
-      // Keep highlight visible for longer duration
-      await new Promise(resolve => {
-        setTimeout(() => {
-          setActiveButton(null);
-          resolve();
-        }, highlightDuration);
-      });
-      
-      // Pause between highlights for better visibility
-      if (i < gamePattern.length - 1) {
-        await new Promise(resolve => {
-          setTimeout(resolve, pauseBetween);
-        });
-      }
-    }
+    // Only show the latest color (current one that was just added)
+    const currentColor = gamePattern[gamePattern.length - 1];
+    
+    // Show the button highlight
+    setActiveButton(currentColor);
+    playSound(currentColor);
+    
+    // Keep highlight visible
+    await new Promise(resolve => {
+      setTimeout(() => {
+        setActiveButton(null);
+        resolve();
+      }, highlightDuration);
+    });
     
     // Wait a bit before allowing user input
     setTimeout(() => {
